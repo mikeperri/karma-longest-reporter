@@ -1,6 +1,8 @@
 var os = require('os');
 
-var LongestReporter = function (helper, longestSpecsToReport) {
+var LongestReporter = function (baseReporterDecorator, helper, longestSpecsToReport) {
+    baseReporterDecorator(this);
+
     var write = process.stdout.write.bind(process.stdout);
     var longestSpecsToReport = longestSpecsToReport ? longestSpecsToReport : 10;
     var specs = [];
@@ -28,7 +30,7 @@ var LongestReporter = function (helper, longestSpecsToReport) {
     }
 }
 
-LongestReporter.$inject = [ 'helper', 'config.longestSpecsToReport' ];
+LongestReporter.$inject = [ 'baseReporterDecorator', 'helper', 'config.longestSpecsToReport' ];
 
 module.exports = {
     'reporter:longest': [ 'type', LongestReporter ]

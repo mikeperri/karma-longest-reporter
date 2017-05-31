@@ -1,4 +1,5 @@
 var os = require('os');
+var chalk = require('chalk');
 
 var LongestReporter = function (baseReporterDecorator, helper, longestSpecsToReport) {
     baseReporterDecorator(this);
@@ -23,9 +24,9 @@ var LongestReporter = function (baseReporterDecorator, helper, longestSpecsToRep
                 return a.time < b.time ? 1 : -1;
             })
             .slice(0, longestSpecsToReport);
-
+        write(chalk.underline.bold('RUN-TIME SUMMARY:') + '\n');
         longestSpecs.forEach(function (spec) {
-            write(spec.time + ': ' + spec.name + os.EOL);
+            write(chalk.cyan.bold(spec.time + ': ') + spec.name + os.EOL);
         });
     }
 }

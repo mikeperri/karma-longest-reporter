@@ -12,5 +12,8 @@
     "karma-reporter"
   ],
   "author": "Mike Perri",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^1.1.3"
+  }
 }

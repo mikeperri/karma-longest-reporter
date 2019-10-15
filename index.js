@@ -1,37 +1,36 @@
-var os = require('os');
+const os = require('os');
 
-var LongestReporter = function (baseReporterDecorator, helper, longestSpecsToReport) {
+const LongestReporter = function (baseReporterDecorator, helper, { maximumDisplay = 10, minimumMillis = 0 }) {
     baseReporterDecorator(this);
 
-    var write = process.stdout.write.bind(process.stdout);
-    var longestSpecsToReport = longestSpecsToReport ? longestSpecsToReport : 10;
-    var specs = [];
+    const write = process.stdout.write.bind(process.stdout);
+    const specs = [];
 
     this.onSpecComplete = function (browser, result) {
-        var name = result.suite.join(' ') + ' ' + result.description;
-        var time = helper.formatTimeInterval(result.time);
+        const name = result.suite.join(' ') + ' ' + result.description;
+        const time = result.time;
 
         specs.push({
-            name: name,
-            time: time
+            name,
+            time
         });
-    }
+    };
 
     this.onBrowserComplete = function (browser) {
-        var longestSpecs = specs
-            .sort(function (a, b) {
-                return a.time < b.time ? 1 : -1;
-            })
-            .slice(0, longestSpecsToReport);
+        const longestSpecs = specs
+            .sort((a, b) => (a.time < b.time ? 1 : -1))
+            .slice(0, maximumDisplay);
 
-        longestSpecs.forEach(function (spec) {
-            write(spec.time + ': ' + spec.name + os.EOL);
-        });
-    }
-}
+        longestSpecs
+            .filter(spec => spec.time > minimumMillis)
+            .forEach(spec =>
+                write(helper.formatTimeInterval(spec.time) + ': ' + spec.name + os.EOL)
+            );
+    };
+};
 
-LongestReporter.$inject = [ 'baseReporterDecorator', 'helper', 'config.longestSpecsToReport' ];
+LongestReporter.$inject = ['baseReporterDecorator', 'helper', 'config.longestSpecsToReport'];
 
 module.exports = {
-    'reporter:longest': [ 'type', LongestReporter ]
+    'reporter:longest': ['type', LongestReporter]
 };

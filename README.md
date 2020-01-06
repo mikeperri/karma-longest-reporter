@@ -5,7 +5,12 @@ A Karma plugin to report which specs take the longest.
 Some of your specs are taking a long time and you want to know which ones.
 
 ## Usage
-Just install this module and add 'longest' to the reporters array in your Karma config.
+Just install this module 
+```
+npm install --save-dev karma-longest-reporter
+```
+
+And add 'longest' to the reporters array in your Karma config.
 ```
     ...
     reporters: [ 'progress', 'coverage', 'longest' ],
